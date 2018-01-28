@@ -106,4 +106,17 @@ public class UsuarioController {
                     .data("Success!")
                     .create();
     }
+    
+    @RequestMapping("/usuario/isActive/{id}")
+    public RestResponse isActive(@PathVariable String id) {
+        Usuario user = new Usuario();
+        user.setId(id);
+        boolean isActive = usuariosRepository.isActive(user);
+        
+        return new RestResponse.Builder()
+            .code(isActive? 200 : 400)
+            .message(isActive ? "User is active at " + new Date() : "User is inactive")
+            .data("Is active: " + isActive)
+            .create();
+    }
 }
