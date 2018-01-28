@@ -132,6 +132,26 @@ public class UsuariosRepository {
         return m != null && m.hasNext();
     }
     
+    public boolean isActive(String id) {
+        if (!repository.existsTable(db, table)) {
+            System.out.println("No existe la db");
+            return false;
+        }
+        if (id == null) {
+            System.out.println("No hay id");
+            return false;
+        }
+        RethinkDB r = repository.getR();
+        Cursor<HashMap> m = r.db(db).table(table)
+                .filter(r.hashMap("id", id))
+                .filter(r.hashMap("active", true))
+                .run(repository.getRethinkDb());
+        
+        System.out.println("Size: " + m.toList().size());
+        
+        return m != null && m.hasNext();
+    }
+    
     public boolean existUser(Usuario u) {
         if (!repository.existsTable(db, table)) {
             return false;
